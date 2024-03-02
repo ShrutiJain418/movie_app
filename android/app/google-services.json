@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "414106673796",
+    "project_id": "felix-4e1f0",
+    "storage_bucket": "felix-4e1f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414106673796:android:7f195a44752f43113bd8d1",
+        "android_client_info": {
+          "package_name": "com.example.felix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV7SALbuqATltaCqJkQS6A5fj8tmztiCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
