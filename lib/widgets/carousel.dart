@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:felix/models/topratedseries.dart';
+import 'package:felix/pages/descriptionPage.dart';
 import 'package:felix/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +23,33 @@ class CustomCarouselSlider extends StatelessWidget {
           var url = data.results[index].backdropPath.toString();
 
           return GestureDetector(
-              child: CachedNetworkImage(imageUrl: "$imageUrl$url"));
+              child: SingleChildScrollView(
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DescriptionPage(
+                      movieId: data.results[index].id,
+                    ),
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  CachedNetworkImage(imageUrl: "$imageUrl$url"),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Text(
+                    data.results[index].title,
+                    style:
+                        TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+                  ),
+                ],
+              ),
+            ),
+          ));
         },
         options: CarouselOptions(
             height: (size.height * 0.33 < 300) ? 300 : size.height * 0.33,

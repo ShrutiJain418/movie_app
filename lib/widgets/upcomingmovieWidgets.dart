@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, prefer_const_constructors
 
 import 'package:felix/models/upcomingMovies.dart';
+import 'package:felix/pages/descriptionPage.dart';
 import 'package:felix/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,14 +45,26 @@ class MovieCard extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: data!.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        padding: EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        child: Image.network(
-                          "$imageUrl${data[index].posterPath}",
-                          fit: BoxFit.cover,
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DescriptionPage(
+                                movieId: data[index].id,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(5.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40.0),
+                          ),
+                          child: Image.network(
+                            "$imageUrl${data[index].posterPath}",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       );
                     },

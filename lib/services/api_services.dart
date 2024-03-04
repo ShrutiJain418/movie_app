@@ -3,8 +3,12 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:felix/models/description.dart';
 import 'package:felix/models/nowPlaying.dart';
+import 'package:felix/models/recommendation.dart';
+import 'package:felix/models/search.dart';
 import 'package:felix/models/topratedseries.dart';
+import 'package:felix/models/topsearches.dart';
 import 'package:felix/models/upcomingMovies.dart';
 import 'package:felix/utils.dart';
 import 'package:http/http.dart' as http;
@@ -53,6 +57,7 @@ class ApiServices {
       Uri.parse(url),
       //headers: {HttpHeaders.authorizationHeader: 'Bearer $apiKey'}
     );
+    print(url);
 
     if (response.statusCode == 200) {
       log("success");
@@ -60,5 +65,73 @@ class ApiServices {
       return TopRatedSeriesModel.fromJson(jsonDecode(response.body));
     }
     throw Exception("Failed to fetch top rated series");
+  }
+
+  Future<SearchModel> getSearchedMovies(String searchedText) async {
+    end = "search/movie?query=$searchedText";
+    final url = "$baseUrl$end";
+
+    final response = await http.get(Uri.parse(url), headers: {
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmNzhhY2MwMWU1NmIzOTk0ZWZhMjU1OWRiYmQ4MGM4MCIsInN1YiI6IjY1ZDk5NzdlZmNiOGNjMDE2MmNhZTZmOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.idQSIX7j2vWhx44azzUiZXUmTZgXhBIOPbIa0AVp3l8'
+    });
+
+    if (response.statusCode == 200) {
+      log("success");
+      log(response.body);
+      return SearchModel.fromJson(jsonDecode(response.body));
+    }
+    throw Exception("Failed to fetch searched movie");
+  }
+
+  Future<TopSearchesModel> getTopSearchedMovies() async {
+    end = "movie/popular";
+    final url = "$baseUrl$end$key";
+
+    final response = await http.get(
+      Uri.parse(url),
+      //headers: {HttpHeaders.authorizationHeader: 'Bearer $apiKey'}
+    );
+
+    if (response.statusCode == 200) {
+      log("successful");
+      log(response.body);
+      return TopSearchesModel.fromJson(jsonDecode(response.body));
+    }
+    throw Exception("Failed to fetch popular movies");
+  }
+
+  Future<DescriptionModel> getDescription(int movieId) async {
+    end = "movie/$movieId";
+    final url = "$baseUrl$end$key";
+
+    final response = await http.get(
+      Uri.parse(url),
+      //headers: {HttpHeaders.authorizationHeader: 'Bearer $apiKey'}
+    );
+
+    if (response.statusCode == 200) {
+      log("success description");
+      log(response.body);
+      return DescriptionModel.fromJson(jsonDecode(response.body));
+    }
+    throw Exception("Failed to fetch movie description");
+  }
+
+  Future<RecommendationModel> getRecommendedMovies(int movieId) async {
+    end = "movie/$movieId/recommendations";
+    final url = "$baseUrl$end";
+
+    final response = await http.get(Uri.parse(url), headers: {
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmNzhhY2MwMWU1NmIzOTk0ZWZhMjU1OWRiYmQ4MGM4MCIsInN1YiI6IjY1ZDk5NzdlZmNiOGNjMDE2MmNhZTZmOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.idQSIX7j2vWhx44azzUiZXUmTZgXhBIOPbIa0AVp3l8'
+    });
+
+    if (response.statusCode == 200) {
+      log("success");
+      log(response.body);
+      return RecommendationModel.fromJson(jsonDecode(response.body));
+    }
+    throw Exception("Failed to fetch recommended movies");
   }
 }

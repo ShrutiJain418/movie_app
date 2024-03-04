@@ -5,6 +5,7 @@ import 'package:felix/models/nowPlaying.dart';
 import 'package:felix/models/topratedseries.dart';
 import 'package:felix/models/upcomingMovies.dart';
 import 'package:felix/models/upcomingMovies.dart';
+import 'package:felix/pages/searchPage.dart';
 import 'package:felix/services/api_services.dart';
 import 'package:felix/widgets/carousel.dart';
 import 'package:felix/widgets/upcomingmovieWidgets.dart';
@@ -38,64 +39,71 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Colors.black,
-        title: Center(
-          child: Text(
-            'FELIX',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              fontSize: 32.0,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: Center(
+            child: Text(
+              'FLIXIE',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                fontSize: 32.0,
+              ),
             ),
           ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.search,
-              color: Colors.white,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchPage()),
+                );
+              },
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
             ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // FutureBuilder(
-            //   future: topRatedSeries,
-            //   builder: (context, snapshot) {
-            //     switch (snapshot.connectionState) {
-            //       case ConnectionState.none:
-            //         return Text('Press button to start.');
-            //       case ConnectionState.active:
-            //       case ConnectionState.waiting:
-            //         return Text('Awaiting result...');
-            //       case ConnectionState.done:
-            //         if (snapshot.hasError)
-            //           return Text('Error: ${snapshot.error}');
-            //         return CustomCarouselSlider(data: snapshot.data!);
-            //       // You can reach your snapshot.data['url'] in here
-            //     }
-            //   },
-            // ),
-            FutureBuilder(
-                future: topRatedSeries,
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
-                    return CustomCarouselSlider(data: snapshot.data!);
-                  } else if (snapshot.hasError) {
-                    return Text('{$snapshot.error}');
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }),
-            MovieCard(future: nowPlaying, headline: "Now Playing"),
-            MovieCard(future: upcomingMovies, headline: "Upcoming Movies"),
           ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // FutureBuilder(
+              //   future: topRatedSeries,
+              //   builder: (context, snapshot) {
+              //     switch (snapshot.connectionState) {
+              //       case ConnectionState.none:
+              //         return Text('Press button to start.');
+              //       case ConnectionState.active:
+              //       case ConnectionState.waiting:
+              //         return Text('Awaiting result...');
+              //       case ConnectionState.done:
+              //         if (snapshot.hasError)
+              //           return Text('Error: ${snapshot.error}');
+              //         return CustomCarouselSlider(data: snapshot.data!);
+              //       // You can reach your snapshot.data['url'] in here
+              //     }
+              //   },
+              // ),
+              FutureBuilder(
+                  future: topRatedSeries,
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasData) {
+                      return CustomCarouselSlider(data: snapshot.data!);
+                    } else if (snapshot.hasError) {
+                      return Text('{$snapshot.error}');
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  }),
+              MovieCard(future: nowPlaying, headline: "Now Playing"),
+              MovieCard(future: upcomingMovies, headline: "Upcoming Movies"),
+            ],
+          ),
         ),
       ),
     );

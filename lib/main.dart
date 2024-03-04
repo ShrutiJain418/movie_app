@@ -27,13 +27,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       scaffoldMessengerKey: Utils.messengerKey,
       debugShowCheckedModeBanner: false,
-      title: 'FELIX',
+      title: 'FLIXIE',
       theme: ThemeData.dark(),
       home: AnimatedSplashScreen(
         backgroundColor: Colors.black,
         duration: 3000,
         splash: Text(
-          'FELIX',
+          'FLIXIE',
           style: TextStyle(
             fontSize: 40.0,
             fontWeight: FontWeight.w900,
@@ -51,85 +51,87 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Felix',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignUpPage()),
-                    );
-                  },
-                  child: Text(
-                    'Sign Up',
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'FLIXIE',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w300,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 70.0),
-            Flexible(
-              flex: 1,
-              child: Text(
-                'Welcome to Felix',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.w700),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpPage()),
+                      );
+                    },
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(height: 20.0),
-            Flexible(
-              flex: 1,
-              child: Text(
-                'Your ultimate destination to discover\na variety of TV shows and movies...',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w100),
-              ),
-            ),
-            SizedBox(height: 50.0),
-            Flexible(
-              flex: 2,
-              child: Image.asset(
-                'assets/images/Picture2.png',
-                fit: BoxFit.contain,
-              ),
-            ),
-            SizedBox(height: 80.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BottomNavBar()),
-                );
-              },
-              child: Text(
-                'Get Started',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.w300,
+              SizedBox(height: 70.0),
+              Flexible(
+                flex: 1,
+                child: Text(
+                  'Welcome to FLIXIE',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 35.0, fontWeight: FontWeight.w700),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 20.0),
+              Flexible(
+                flex: 1,
+                child: Text(
+                  'Watch everything you want\n for free!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w100),
+                ),
+              ),
+              SizedBox(height: 50.0),
+              Flexible(
+                flex: 2,
+                child: Image.asset(
+                  'assets/images/Picture2.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              SizedBox(height: 80.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BottomNavBar()),
+                  );
+                },
+                child: Text(
+                  'Get Started',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
