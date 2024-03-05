@@ -11,10 +11,11 @@ import 'package:felix/models/topratedseries.dart';
 import 'package:felix/models/topsearches.dart';
 import 'package:felix/models/upcomingMovies.dart';
 import 'package:felix/utils.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 const baseUrl = "https://api.themoviedb.org/3/";
-var key = "?api_key=$apiKey";
+var key = "?api_key=${dotenv.env['apiKey']}";
 late String end;
 
 class ApiServices {
@@ -22,8 +23,9 @@ class ApiServices {
     end = "movie/upcoming";
     final url = "$baseUrl$end$key";
 
-    final response = await http.get(Uri.parse(url),
-        headers: {HttpHeaders.authorizationHeader: 'Bearer $apiKey'});
+    final response = await http.get(
+      Uri.parse(url),
+    );
 
     if (response.statusCode == 200) {
       log("success");
@@ -37,8 +39,9 @@ class ApiServices {
     end = "movie/now_playing";
     final url = "$baseUrl$end$key";
 
-    final response = await http.get(Uri.parse(url),
-        headers: {HttpHeaders.authorizationHeader: 'Bearer $apiKey'});
+    final response = await http.get(
+      Uri.parse(url),
+    );
 
     log('xcewfewf');
     if (response.statusCode == 200) {
