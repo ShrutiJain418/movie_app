@@ -1,13 +1,19 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, dead_code
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, dead_code, use_build_context_synchronously
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:felix/models/description.dart';
 import 'package:felix/models/recommendation.dart';
+import 'package:felix/pages/login.dart';
 import 'package:felix/pages/searchPage.dart';
+import 'package:felix/pages/videoplayer.dart';
 import 'package:felix/services/api_services.dart';
+import 'package:felix/services/extraservices.dart';
 import 'package:felix/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 class DescriptionPage extends StatefulWidget {
   const DescriptionPage({super.key, required this.movieId});
@@ -34,6 +40,93 @@ class _DescriptionPageState extends State<DescriptionPage> {
     movierecommendation = apiServices.getRecommendedMovies(widget.movieId);
 
     setState(() {});
+  }
+
+  // addToHistoryPage function
+  // void addToHistoryPage() async {
+  //   try {
+  //     var userId = FirebaseAuth.instance.currentUser?.uid;
+  //     if (userId != null) {
+  //       var snapshot = await FirebaseFirestore.instance
+  //           .collection('history')
+  //           .doc(userId)
+  //           .get();
+
+  //       if (snapshot.exists) {
+  //         var movies = snapshot.data()?['movies'] as List<dynamic>?;
+
+  //         if (movies != null) {
+  //           await FirebaseFirestore.instance
+  //               .collection('history')
+  //               .doc(userId)
+  //               .update({
+  //             'movies': FieldValue.arrayUnion([widget.movieId])
+  //           });
+  //         } else {
+  //           // Create 'movies' field if it doesn't exist
+  //           await FirebaseFirestore.instance
+  //               .collection('history')
+  //               .doc(userId)
+  //               .set({
+  //             'movies': [widget.movieId]
+  //           });
+  //         }
+  //       } else {
+  //         // Create new document if it doesn't exist
+  //         await FirebaseFirestore.instance
+  //             .collection('history')
+  //             .doc(userId)
+  //             .set({
+  //           'movies': [widget.movieId]
+  //         });
+  //       }
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text('Movie added to history page'),
+  //         ),
+  //       );
+  //     } else {
+  //       // Handle case where user is not authenticated
+  //       throw 'User is not authenticated';
+  //     }
+  //   } catch (error) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Failed to add movie to history page: $error'),
+  //       ),
+  //     );
+  //   }
+  // }
+  final FireBaseServices _firebaseServices = FireBaseServices();
+
+  // Method to add the current movie to the user's watchlist
+  Future<void> _addToWatchlist() async {
+    try {
+      // Replace these values with actual status and media type
+      String status = 'Watch Later';
+      String mediaType = 'Movie';
+
+      // Call the addWatching method to add the movie to the watchlist
+      await _firebaseServices.addWatching(
+        widget.movieId.toString(), // Pass the movie ID
+        status,
+        mediaType,
+      );
+
+      // Show a success message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Movie added to watchlist'),
+        ),
+      );
+    } catch (error) {
+      // Show an error message if adding to watchlist fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to add movie to watchlist: $error'),
+        ),
+      );
+    }
   }
 
   @override
@@ -65,7 +158,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                           ),
                         ),
                         child: SafeArea(
-                          child: Row(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               IconButton(
@@ -81,6 +174,63 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                   Icons.arrow_back_ios,
                                   color: Colors.white,
                                 ),
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: CircleBorder(),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => VideoPlayerPage(
+                                            videoUrl:
+                                                'https://www.youtube.com/watch?v=nC1rbW2YSz0&list=PL9gnSGHSqcnp39cTyB1dTZ2pJ04Xmdrod&index=11', // Pass your video URL here
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Icon(
+                                      Icons.play_circle,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: CircleBorder(),
+                                    ),
+                                    onPressed: () {
+                                      HapticFeedback.lightImpact();
+                                      // pshowDialog(context,
+                                      //     widget.movieId.toString(), "movie");
+                                      _addToWatchlist();
+                                    },
+                                    child: Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: movie.adult,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: CircleBorder(),
+                                      ),
+                                      onPressed: () {},
+                                      child: Icon(
+                                        Icons.warning,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

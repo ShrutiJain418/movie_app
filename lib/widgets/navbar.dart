@@ -7,7 +7,7 @@ import 'package:felix/pages/wishlist.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+  const BottomNavBar({super.key, required int currentIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,11 @@ class BottomNavBar extends StatelessWidget {
           children: [
             HomePage(),
             WishlistPage(),
-            HistoryPage(),
+            HistoryPage(
+                // accountId: '',
+                // watchList: [],
+                // status: '',
+                ),
             ProfilePage(),
           ],
         ),

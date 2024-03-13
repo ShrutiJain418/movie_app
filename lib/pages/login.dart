@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, use_rethrow_when_possible, avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:felix/main.dart';
 import 'package:felix/pages/forgetPassword.dart';
 import 'package:felix/pages/homepage.dart';
 import 'package:felix/pages/signup.dart';
 import 'package:felix/utils.dart';
+import 'package:felix/widgets/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -156,18 +158,147 @@ class _LoginPageState extends State<LoginPage> {
 
   Future login() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
-      );
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
+      )
+          //start the collection when user login in successfully
+          .then((value) async {
+        User? user = FirebaseAuth.instance.currentUser;
+//if user is not null make a collection 'users' and get their uid
+        if (user != null) {
+          DocumentSnapshot userdoc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
+          print(user.uid);
+//set the email of the user for future reference and watchlist
+          if (!userdoc.exists) {
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .set({'email': user.email, 'Watchlist': []});
+          }
+        }
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BottomNavBar(
+              currentIndex: 0,
+            ),
+          ),
+        );
+      });
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message);
     }
   }
+}
+
+class FireBaseServices {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> addWatching(String id, String status, String mediaType) async {
+    try {
+      DocumentSnapshot userSnapshot = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .get();
+
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+
+      if (userData != null && userData.containsKey('WatchList')) {
+        List<dynamic> watchlist = userData['WatchList'];
+
+        for (var i = 0; i < watchlist.length; i++) {
+          if (watchlist[i]['Id'] == id) {
+            await _firestore
+                .collection('users')
+                .doc(_auth.currentUser!.uid)
+                .update({
+                  'WatchList': FieldValue.arrayRemove([
+                    {
+                      "Id": id,
+                      "status": watchlist[i]["status"],
+                      "mediaType": watchlist[i]["mediaType"],
+                    }
+                  ])
+                })
+                .then((value) {})
+                .catchError((error) {});
+          }
+        }
+      }
+
+      await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .update({
+            "WatchList": FieldValue.arrayUnion([
+              {
+                "Id": id,
+                "status": status,
+                "mediaType": mediaType,
+              }
+            ])
+          })
+          .then((value) => {})
+          .catchError((error) {});
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<List<dynamic>> getWatchList() async {
+    try {
+      DocumentSnapshot userSnapshot = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .get();
+
+      Map<String, dynamic>? userData =
+          userSnapshot.data() as Map<String, dynamic>?;
+
+      if (userData != null && userData.containsKey('WatchList')) {
+        List<dynamic> watchlist = userData['WatchList'];
+        return watchlist;
+      } else {
+        return [];
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Future<String> getPosterUrl(String id) async {
+  //   try {
+  //     DocumentSnapshot userSnapshot = await _firestore
+  //         .collection('users')
+  //         .doc(_auth.currentUser!.uid)
+  //         .get();
+
+  //     if (userSnapshot.exists && userSnapshot.data() != null) {
+  //       Map<String, dynamic>? userData =
+  //           userSnapshot.data() as Map<String, dynamic>?;
+
+  //       if (userData != null && userData.containsKey('WatchList')) {
+  //         List<dynamic> watchlist = userData['WatchList'];
+  //         for (var movie in watchlist) {
+  //           if (movie['Id'] == id) {
+  //             return movie['poster_path'] ?? '';
+  //           }
+  //         }
+  //       }
+  //     }
+
+  //     return '';
+  //   } catch (error) {
+  //     print('Error fetching poster URL: $error');
+  //     return '';
+  //   }
+  // }
 }

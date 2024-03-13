@@ -120,7 +120,10 @@ class LandingPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => BottomNavBar()),
+                    MaterialPageRoute(
+                        builder: (context) => BottomNavBar(
+                              currentIndex: 0,
+                            )),
                   );
                 },
                 child: Text(

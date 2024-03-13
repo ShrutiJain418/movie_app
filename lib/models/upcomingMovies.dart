@@ -15,21 +15,6 @@ class UpcomingMovieModel {
     required this.totalResults,
   });
 
-  UpcomingMovieModel copyWith({
-    Dates? dates,
-    int? page,
-    List<Result>? results,
-    int? totalPages,
-    int? totalResults,
-  }) =>
-      UpcomingMovieModel(
-        dates: dates ?? this.dates,
-        page: page ?? this.page,
-        results: results ?? this.results,
-        totalPages: totalPages ?? this.totalPages,
-        totalResults: totalResults ?? this.totalResults,
-      );
-
   factory UpcomingMovieModel.fromRawJson(String str) =>
       UpcomingMovieModel.fromJson(json.decode(str));
 
@@ -63,15 +48,6 @@ class Dates {
     required this.minimum,
   });
 
-  Dates copyWith({
-    DateTime? maximum,
-    DateTime? minimum,
-  }) =>
-      Dates(
-        maximum: maximum ?? this.maximum,
-        minimum: minimum ?? this.minimum,
-      );
-
   factory Dates.fromRawJson(String str) => Dates.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
@@ -94,7 +70,7 @@ class Result {
   String backdropPath;
   List<int> genreIds;
   int id;
-  OriginalLanguage originalLanguage;
+  String originalLanguage;
   String originalTitle;
   String overview;
   double popularity;
@@ -122,39 +98,6 @@ class Result {
     required this.voteCount,
   });
 
-  Result copyWith({
-    bool? adult,
-    String? backdropPath,
-    List<int>? genreIds,
-    int? id,
-    OriginalLanguage? originalLanguage,
-    String? originalTitle,
-    String? overview,
-    double? popularity,
-    String? posterPath,
-    DateTime? releaseDate,
-    String? title,
-    bool? video,
-    double? voteAverage,
-    int? voteCount,
-  }) =>
-      Result(
-        adult: adult ?? this.adult,
-        backdropPath: backdropPath ?? this.backdropPath,
-        genreIds: genreIds ?? this.genreIds,
-        id: id ?? this.id,
-        originalLanguage: originalLanguage ?? this.originalLanguage,
-        originalTitle: originalTitle ?? this.originalTitle,
-        overview: overview ?? this.overview,
-        popularity: popularity ?? this.popularity,
-        posterPath: posterPath ?? this.posterPath,
-        releaseDate: releaseDate ?? this.releaseDate,
-        title: title ?? this.title,
-        video: video ?? this.video,
-        voteAverage: voteAverage ?? this.voteAverage,
-        voteCount: voteCount ?? this.voteCount,
-      );
-
   factory Result.fromRawJson(String str) => Result.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
@@ -164,8 +107,7 @@ class Result {
         backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
-        originalLanguage:
-            originalLanguageValues.map[json["original_language"]]!,
+        originalLanguage: json["original_language"],
         originalTitle: json["original_title"],
         overview: json["overview"],
         popularity: json["popularity"]?.toDouble(),
@@ -182,7 +124,7 @@ class Result {
         "backdrop_path": backdropPath,
         "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
         "id": id,
-        "original_language": originalLanguageValues.reverse[originalLanguage],
+        "original_language": originalLanguage,
         "original_title": originalTitle,
         "overview": overview,
         "popularity": popularity,
@@ -194,25 +136,4 @@ class Result {
         "vote_average": voteAverage,
         "vote_count": voteCount,
       };
-}
-
-enum OriginalLanguage { EN, ES, JA, KO }
-
-final originalLanguageValues = EnumValues({
-  "en": OriginalLanguage.EN,
-  "es": OriginalLanguage.ES,
-  "ja": OriginalLanguage.JA,
-  "ko": OriginalLanguage.KO
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }
