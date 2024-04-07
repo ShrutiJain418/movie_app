@@ -216,4 +216,8 @@ class ApiServices {
       throw Exception('Failed to fetch watchlisted movies: $error');
     }
   }
+
+  String getTrailerUrl(int movieId) {
+    return 'https://www.youtube.com/trailer?id=$movieId';
+  }
 }

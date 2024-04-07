@@ -35,18 +35,22 @@ class CustomCarouselSlider extends StatelessWidget {
                   ),
                 );
               },
-              child: Column(
-                children: [
-                  CachedNetworkImage(imageUrl: "$imageUrl$url"),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text(
-                    data.results[index].title,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
-                  ),
-                ],
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                child: Column(
+                  children: [
+                    CachedNetworkImage(imageUrl: "$imageUrl$url"),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Text(
+                      data.results[index].title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 20.0),
+                    ),
+                  ],
+                ),
               ),
             ),
           ));

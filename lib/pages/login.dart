@@ -10,6 +10,8 @@ import 'package:felix/widgets/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttermoji/fluttermoji.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -34,123 +36,143 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            IconButton(
-              alignment: Alignment.topLeft,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LandingPage(),
-                  ),
-                );
-              },
-              icon: Icon(
-                Icons.arrow_back,
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Center(
-              child: Text(
-                'FELIX',
-                style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(
-              height: 80.0,
-            ),
-            TextFormField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              onSaved: (email) {},
-              decoration: const InputDecoration(
-                hintText: "Your email",
-                prefixIcon: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Icon(Icons.person),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 35.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              IconButton(
+                alignment: Alignment.topLeft,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LandingPage(),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.arrow_back,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: TextFormField(
-                controller: passwordController,
-                textInputAction: TextInputAction.done,
-                obscureText: true,
+              SizedBox(
+                height: 20.0,
+              ),
+              Center(
+                child: Text(
+                  'FLIXIE',
+                  style: GoogleFonts.caveat(
+                    textStyle: TextStyle(
+                      fontSize: 50.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 80.0,
+              ),
+              TextFormField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                onSaved: (email) {},
                 decoration: const InputDecoration(
-                  hintText: "Your password",
+                  hintText: "Your email",
                   prefixIcon: Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: Icon(Icons.lock),
+                    child: Icon(Icons.person),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 80.0),
-            ElevatedButton(
-              onPressed: () {
-                //authentication
-                login();
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: TextFormField(
+                  controller: passwordController,
+                  textInputAction: TextInputAction.done,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    hintText: "Your password",
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Icon(Icons.lock),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 100.0),
+              ElevatedButton(
+                onPressed: () {
+                  //authentication
+                  login();
 
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => HomePage(),
-                //   ),
-                // );
-              },
-              child: Text(
-                "Login".toUpperCase(),
-              ),
-            ),
-            const SizedBox(height: 15.0),
-            GestureDetector(
-              child: Center(
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => HomePage(),
+                  //   ),
+                  // );
+                },
                 child: Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 15,
+                  "Login".toUpperCase(),
+                  style: TextStyle(color: Colors.black),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red[200], // Button color
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  elevation: 5, // Add shadow
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              GestureDetector(
+                child: Center(
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.grey,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ForgetPasswordPage(),
                   ),
                 ),
               ),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ForgetPasswordPage(),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 5.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Do not have an account?',
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignUpPage(),
-                      ),
-                    );
-                  },
-                  child: Text('Sign Up'),
-                ),
-              ],
-            )
-          ],
+              // SizedBox(
+              //   height: 5.0,
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Do not have an account?',
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignUpPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(color: Colors.red[200]),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -274,31 +296,5 @@ class FireBaseServices {
     }
   }
 
-  // Future<String> getPosterUrl(String id) async {
-  //   try {
-  //     DocumentSnapshot userSnapshot = await _firestore
-  //         .collection('users')
-  //         .doc(_auth.currentUser!.uid)
-  //         .get();
-
-  //     if (userSnapshot.exists && userSnapshot.data() != null) {
-  //       Map<String, dynamic>? userData =
-  //           userSnapshot.data() as Map<String, dynamic>?;
-
-  //       if (userData != null && userData.containsKey('WatchList')) {
-  //         List<dynamic> watchlist = userData['WatchList'];
-  //         for (var movie in watchlist) {
-  //           if (movie['Id'] == id) {
-  //             return movie['poster_path'] ?? '';
-  //           }
-  //         }
-  //       }
-  //     }
-
-  //     return '';
-  //   } catch (error) {
-  //     print('Error fetching poster URL: $error');
-  //     return '';
-  //   }
-  // }
+  getMovieDescription(int movieId) {}
 }

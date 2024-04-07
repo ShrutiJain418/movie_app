@@ -11,6 +11,7 @@ import 'package:felix/widgets/carousel.dart';
 import 'package:felix/widgets/upcomingmovieWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import '../models/upcomingMovies.dart';
 
@@ -45,14 +46,14 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: Center(
-            child: Text(
-              'FLIXIE',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                fontSize: 32.0,
-              ),
-            ),
+            child: Text('FLIXIE',
+                style: GoogleFonts.caveat(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontSize: 28.0,
+                  ),
+                )),
           ),
           actions: [
             IconButton(
@@ -72,27 +73,12 @@ class _HomePageState extends State<HomePage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              // FutureBuilder(
-              //   future: topRatedSeries,
-              //   builder: (context, snapshot) {
-              //     switch (snapshot.connectionState) {
-              //       case ConnectionState.none:
-              //         return Text('Press button to start.');
-              //       case ConnectionState.active:
-              //       case ConnectionState.waiting:
-              //         return Text('Awaiting result...');
-              //       case ConnectionState.done:
-              //         if (snapshot.hasError)
-              //           return Text('Error: ${snapshot.error}');
-              //         return CustomCarouselSlider(data: snapshot.data!);
-              //       // You can reach your snapshot.data['url'] in here
-              //     }
-              //   },
-              // ),
               FutureBuilder(
                   future: topRatedSeries,
                   builder: (BuildContext context, snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasData) {
                       return CustomCarouselSlider(data: snapshot.data!);
                     } else if (snapshot.hasError) {
                       return Text('{$snapshot.error}');

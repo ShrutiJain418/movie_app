@@ -9,6 +9,7 @@ import 'package:felix/services/api_services.dart';
 import 'package:felix/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -51,39 +52,58 @@ class _SearchPageState extends State<SearchPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              CupertinoSearchTextField(
-                controller: searchcontroller,
-                style: TextStyle(color: Colors.white),
-                backgroundColor: Colors.grey.withOpacity(0.2),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: Colors.grey,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Expanded(
+                      child: CupertinoSearchTextField(
+                        controller: searchcontroller,
+                        style: TextStyle(color: Colors.white),
+                        backgroundColor: Colors.grey.withOpacity(0.2),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.grey,
+                        ),
+                        suffixIcon: Icon(
+                          Icons.cancel,
+                          color: Colors.grey,
+                        ),
+                        onChanged: (value) {
+                          if (value.isEmpty) {
+                            setState(() {
+                              searchModel = null;
+                            });
+                          } else {
+                            search(searchcontroller.text);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                suffixIcon: Icon(
-                  Icons.cancel,
-                  color: Colors.grey,
-                ),
-                onChanged: (value) {
-                  if (value.isEmpty) {
-                    setState(() {
-                      searchModel = null;
-                    });
-                  } else {
-                    search(searchcontroller.text);
-                  }
-                },
               ),
               searchcontroller.text.isEmpty
                   ? FutureBuilder(
                       future: popularmovies,
                       builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
                         if (snapshot.hasData) {
                           var data = snapshot.data?.results;
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: 20.0,
+                                height: 5.0,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
@@ -95,7 +115,7 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                               ),
                               SizedBox(
-                                height: 10.0,
+                                height: 5.0,
                               ),
                               ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
@@ -134,14 +154,41 @@ class _SearchPageState extends State<SearchPage> {
                                               width: 20.0,
                                             ),
                                             SizedBox(
-                                              width: 260.0,
-                                              child: Text(
-                                                data[index].title,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w800),
+                                              width: 200.0,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    data[index].title,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        fontSize: 20.0),
+                                                  ),
+                                                  SizedBox(height: 4),
+                                                  Text(
+                                                    data[index].overview,
+                                                    maxLines: 3,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: GoogleFonts.kalam(
+                                                      textStyle: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 12),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 10),
+                                                  Text(
+                                                    'Release Date: ${data[index].releaseDate}',
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 10.0),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],

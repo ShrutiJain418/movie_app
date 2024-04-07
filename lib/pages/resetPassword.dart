@@ -2,6 +2,7 @@
 
 import 'package:felix/pages/login.dart';
 import 'package:felix/pages/otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -105,10 +106,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               ElevatedButton(
                 onPressed: () {
                   if (formkey.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
+                    _resetPassword();
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => LoginPage()),
+                    // );
                   }
                 },
                 child: Text('Reset Password'),
@@ -118,5 +120,28 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         ),
       ),
     );
+  }
+
+  void _resetPassword() {
+    // Validate the form
+    if (formkey.currentState!.validate()) {
+      User? user = FirebaseAuth.instance.currentUser;
+      String newPassword = passwordController.text;
+
+      user?.updatePassword(newPassword).then((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      }).catchError((error) {
+        print("Failed to update password: $error");
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to update password. Please try again."),
+          ),
+        );
+      });
+    }
   }
 }

@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:felix/models/description.dart';
 import 'package:felix/models/recommendation.dart';
+import 'package:felix/pages/historyPage.dart';
+import 'package:felix/pages/homepage.dart';
 import 'package:felix/pages/login.dart';
 import 'package:felix/pages/searchPage.dart';
 import 'package:felix/pages/videoplayer.dart';
@@ -14,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DescriptionPage extends StatefulWidget {
   const DescriptionPage({super.key, required this.movieId});
@@ -28,6 +31,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
   ApiServices apiServices = ApiServices();
   late Future<DescriptionModel> moviedescription;
   late Future<RecommendationModel> movierecommendation;
+  late Future<String> trailerUrlFuture;
 
   @override
   void initState() {
@@ -38,89 +42,30 @@ class _DescriptionPageState extends State<DescriptionPage> {
   fetchdata() {
     moviedescription = apiServices.getDescription(widget.movieId);
     movierecommendation = apiServices.getRecommendedMovies(widget.movieId);
+    trailerUrlFuture = Future.value(apiServices.getTrailerUrl(widget.movieId));
 
     setState(() {});
   }
 
-  // addToHistoryPage function
-  // void addToHistoryPage() async {
-  //   try {
-  //     var userId = FirebaseAuth.instance.currentUser?.uid;
-  //     if (userId != null) {
-  //       var snapshot = await FirebaseFirestore.instance
-  //           .collection('history')
-  //           .doc(userId)
-  //           .get();
-
-  //       if (snapshot.exists) {
-  //         var movies = snapshot.data()?['movies'] as List<dynamic>?;
-
-  //         if (movies != null) {
-  //           await FirebaseFirestore.instance
-  //               .collection('history')
-  //               .doc(userId)
-  //               .update({
-  //             'movies': FieldValue.arrayUnion([widget.movieId])
-  //           });
-  //         } else {
-  //           // Create 'movies' field if it doesn't exist
-  //           await FirebaseFirestore.instance
-  //               .collection('history')
-  //               .doc(userId)
-  //               .set({
-  //             'movies': [widget.movieId]
-  //           });
-  //         }
-  //       } else {
-  //         // Create new document if it doesn't exist
-  //         await FirebaseFirestore.instance
-  //             .collection('history')
-  //             .doc(userId)
-  //             .set({
-  //           'movies': [widget.movieId]
-  //         });
-  //       }
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text('Movie added to history page'),
-  //         ),
-  //       );
-  //     } else {
-  //       // Handle case where user is not authenticated
-  //       throw 'User is not authenticated';
-  //     }
-  //   } catch (error) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text('Failed to add movie to history page: $error'),
-  //       ),
-  //     );
-  //   }
-  // }
   final FireBaseServices _firebaseServices = FireBaseServices();
 
-  // Method to add the current movie to the user's watchlist
   Future<void> _addToWatchlist() async {
     try {
-      // Replace these values with actual status and media type
       String status = 'Watch Later';
       String mediaType = 'Movie';
 
-      // Call the addWatching method to add the movie to the watchlist
       await _firebaseServices.addWatching(
-        widget.movieId.toString(), // Pass the movie ID
+        widget.movieId.toString(),
         status,
         mediaType,
       );
 
-      // Show a success message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Movie added to watchlist'),
         ),
       );
     } catch (error) {
-      // Show an error message if adding to watchlist fails
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to add movie to watchlist: $error'),
@@ -137,7 +82,9 @@ class _DescriptionPageState extends State<DescriptionPage> {
         child: FutureBuilder(
           future: moviedescription,
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasData) {
               final movie = snapshot.data;
               final movieGenre = movie!.genres
                   .map(
@@ -167,7 +114,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => SearchPage()),
+                                        builder: (context) => HomePage()),
                                   );
                                 },
                                 icon: Icon(
@@ -192,7 +139,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                         MaterialPageRoute(
                                           builder: (context) => VideoPlayerPage(
                                             videoUrl:
-                                                'https://www.youtube.com/watch?v=nC1rbW2YSz0&list=PL9gnSGHSqcnp39cTyB1dTZ2pJ04Xmdrod&index=11', // Pass your video URL here
+                                                'https://www.youtube.com/watch?v=U2Qp5pL3ovA',
                                           ),
                                         ),
                                       );
@@ -200,6 +147,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                     child: Icon(
                                       Icons.play_circle,
                                       color: Colors.white,
+                                      size: 30,
                                     ),
                                   ),
                                   ElevatedButton(
@@ -208,28 +156,33 @@ class _DescriptionPageState extends State<DescriptionPage> {
                                     ),
                                     onPressed: () {
                                       HapticFeedback.lightImpact();
-                                      // pshowDialog(context,
-                                      //     widget.movieId.toString(), "movie");
                                       _addToWatchlist();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HistoryPage(),
+                                        ),
+                                      );
                                     },
                                     child: Icon(
                                       Icons.add,
                                       color: Colors.white,
+                                      size: 30,
                                     ),
                                   ),
-                                  Visibility(
-                                    visible: movie.adult,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        shape: CircleBorder(),
-                                      ),
-                                      onPressed: () {},
-                                      child: Icon(
-                                        Icons.warning,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
+                                  // Visibility(
+                                  //   visible: movie.adult,
+                                  //   child: ElevatedButton(
+                                  //     style: ElevatedButton.styleFrom(
+                                  //       shape: CircleBorder(),
+                                  //     ),
+                                  //     onPressed: () {},
+                                  //     child: Icon(
+                                  //       Icons.warning,
+                                  //       color: Colors.white,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ],
@@ -248,8 +201,10 @@ class _DescriptionPageState extends State<DescriptionPage> {
                       children: [
                         Text(
                           movie.title,
-                          style: TextStyle(
-                              fontSize: 22.0, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.neuton(
+                            textStyle: TextStyle(
+                                fontSize: 24.0, fontWeight: FontWeight.bold),
+                          ),
                         ),
                         SizedBox(
                           height: 10.0,
@@ -259,15 +214,15 @@ class _DescriptionPageState extends State<DescriptionPage> {
                             Text(
                               movie.releaseDate.year.toString(),
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.grey),
+                                  TextStyle(fontSize: 12, color: Colors.grey),
                             ),
                             SizedBox(
-                              width: 20.0,
+                              width: 15.0,
                             ),
                             Text(
-                              movieGenre,
+                              'Genre: ${movieGenre.split(',').take(3).toList().join(", ")}...',
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.grey),
+                                  TextStyle(fontSize: 12, color: Colors.grey),
                             ),
                           ],
                         ),
@@ -276,10 +231,12 @@ class _DescriptionPageState extends State<DescriptionPage> {
                         ),
                         Text(
                           movie.overview,
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal),
+                          style: GoogleFonts.philosopher(
+                            textStyle: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal),
+                          ),
                           maxLines: 5,
                           overflow: TextOverflow.fade,
                         )
@@ -287,25 +244,31 @@ class _DescriptionPageState extends State<DescriptionPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 30.0,
+                    height: 20.0,
                   ),
                   FutureBuilder(
                     future: movierecommendation,
                     builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
                       final movierecom = snapshot.data;
                       return movierecom!.results.isEmpty
                           ? SizedBox()
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'More Like This',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w800),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 16.0),
+                                  child: Text(
+                                    'More Like This...',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w800),
+                                  ),
                                 ),
                                 SizedBox(
-                                  height: 20.0,
+                                  height: 10.0,
                                 ),
                                 GridView.builder(
                                   itemCount: movierecom.results.length,
