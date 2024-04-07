@@ -1,6 +1,11 @@
-# felix
+# FLIXIE: Your Ultimate Movie Companion
 
-A new Flutter project.
+Flixie is a user-friendly movie app built using Flutter. Discover new releases, trending films, and classics effortlessly. 
+Flixie delivers a personalized and immersive movie experience just for you.
+
+<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/41665985-6c38-4dd4-ab7c-075b928f50b0" width="100" height="200">
+
+
 
 ## Getting Started
 
