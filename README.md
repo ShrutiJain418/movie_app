@@ -111,6 +111,51 @@ lib
     /upcomingmovieWidgets.dart
 ```
 
+## Future Roadmap
+
+- Add more screens
+- Polish the UI
+
+Feel free to open issues if you'd like certain features to be implemented (though keep your expectations low, I'm doing this for free after all 😉).
+
+## Packages in use
+
+The "core" package of the app uses the following packages:
+
+- [email_validator](https://pub.dev/packages/email_validator) Validates email addresses input by users, ensuring data integrity and accuracy during account creation and 
+  login processes
+- [dio](https://pub.dev/packages/dio) for the API client
+- [youtube_player_iframe](https://pub.dev/packages/youtube_player_iframe) Enables video playback within the app, supporting various video formats and integration with 
+  YouTube content
+- [envied](https://pub.dev/packages/envied) for API key security
+- [fluttermoji](https://pub.dev/packages/fluttermoji) Generates customizable avatars based on user preferences, enhancing the profile creation and customization experience
+- [shared_preferences](https://pub.dev/packages/shared_preferences) Enables simple data persistence for storing user preferences and settings locally, enhancing the user 
+  experience by preserving app state between sessions.
+
+## Getting a TMDB API key
+
+This project uses the TMDB API to get the latest movies data.
+
+Before running the app you need to [sign up on the TMDB website](https://www.themoviedb.org/signup), then obtain an API key on the [settings API page](https://www.themoviedb.org/settings/api).
+
+Once you have this, create an `.env` file inside `packages/core/`, and add your key:
+
+```dart
+// .env
+TMDB_KEY=your-api-key
+```
+
+Then, run the code generator:
+
+```
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+This will generate a `env.g.dart` file inside `packages/core/lib/api`, that is used when making requests to the TMDB API.
+
+Congratulations, you're good to go. 😎
+
+
 
 
 
