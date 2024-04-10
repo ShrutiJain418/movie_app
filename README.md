@@ -67,56 +67,14 @@ All common functionality lives in `packages/core`. This includes a TMDB API wrap
 `/packages/core/lib/models`:
 This folder contains the data models. Each model class typically represents a specific data entity and may include properties, methods, and serialization logic.
 
-```
-lib
-  /models
-    /description.dart
-    /recommendation.dart
-    /search.dart
-    /topsearches.dart
-    /watchlistmodel.dart
-```
-
 `/packages/core/lib/pages`:
 The pages folder houses the screens or pages of the app. These files contain the UI layout, navigation logic, and interaction behavior for their respective screens. 
-
-```
-lib
-  /pages
-    /loginPage.dart
-    /descriptionPage.dart
-    /homePage.dart
-    /searchPage.dart
-    /profilePage.dart
-```
 
 `/packages/core/lib/services`:
 This includes services for fetching movie data from the TMDB API, managing user authentication with Firebase Authentication, storing user data in Cloud Firestore, and any other backend-related tasks.
 
-```
-lib
-  /services
-    /api_services.dart
-    /extraservices.dart
-```
-
 `/packages/core/lib/widgets`:
 The widgets folder contains reusable UI components and widgets used throughout the app. These widgets encapsulate specific UI elements or functionality and can be easily reused across different screens.
-
-```
-lib
-  /widgets
-    /carousel.dart
-    /navbar.dart
-    /upcomingmovieWidgets.dart
-```
-
-## Future Roadmap
-
-- Add more screens
-- Polish the UI
-
-Feel free to open issues if you'd like certain features to be implemented (though keep your expectations low, I'm doing this for free after all 😉).
 
 ## Packages in use
 
