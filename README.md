@@ -3,12 +3,12 @@
 Flixie is a user-friendly movie app built using Flutter. Discover new releases, trending films, and classics effortlessly. 
 Flixie delivers a personalized and immersive movie experience just for you!!!
 
-<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/41665985-6c38-4dd4-ab7c-075b928f50b0" width="110" height="220" > 
-<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/6c88f51b-9bc5-4d92-99d7-7b2b88c23718" width="110" height="220">
-<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/7e466b85-43a3-4afc-ba7b-e23d76e32e30" width="110" height="220">
-<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/8d0c439b-daa8-4444-9ce7-fd420297769e" width="110" height="220">
-<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/291a4d03-fcb8-4711-b491-c30775a04153" width="110" height="220">
-<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/7c6b5e95-c1e5-45ca-b248-02afc6acbfd9" width="110" height="220"><br>
+<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/41665985-6c38-4dd4-ab7c-075b928f50b0" width="150" > 
+<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/6c88f51b-9bc5-4d92-99d7-7b2b88c23718" width="150">
+<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/7e466b85-43a3-4afc-ba7b-e23d76e32e30" width="150">
+<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/8d0c439b-daa8-4444-9ce7-fd420297769e" width="150">
+<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/291a4d03-fcb8-4711-b491-c30775a04153" width="150">
+<img src="https://github.com/ShrutiJain418/movie_app/assets/113288105/7c6b5e95-c1e5-45ca-b248-02afc6acbfd9" width="150"><br>
 
 The project uses the [TMDB API](https://www.themoviedb.org/documentation/api) to fetch a list of movies, and includes features like
 recommendations and watchlisting your favourite movies.
